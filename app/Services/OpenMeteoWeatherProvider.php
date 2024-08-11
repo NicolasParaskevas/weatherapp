@@ -6,7 +6,7 @@ use App\Interfaces\WeatherProviderInterface;
 
 class OpenMeteoWeatherProvider implements WeatherProviderInterface
 {
-    public function getData(float $long, float $lat): array | false
+    public function getData(float $long, float $lat, int $hour): array | false
     {
         $ch = curl_init();
 
@@ -25,7 +25,7 @@ class OpenMeteoWeatherProvider implements WeatherProviderInterface
 
         $result_json = json_decode($result, true);
 
-        if (!is_array($result_json))
+        if (!is_array($result_json) || !isset($result_json["hourly"]["temperature_2m"][$hour]))
         {
             Log::error("OpenMeteo - error parsing json response");
             return false;
@@ -36,7 +36,9 @@ class OpenMeteoWeatherProvider implements WeatherProviderInterface
             Log::error("OpenMeteo - Error: " . $result_json["reason"]);
             return false;
         }
-
-        return $result_json;
+        
+        return array(
+            "temp" => $result_json["hourly"]["temperature_2m"][$hour]
+        );
     }
 }

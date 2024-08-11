@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class WeatherApiWeatherProvider implements WeatherProviderInterface
 {
-    public function getData(float $long, float $lat): array | false
+    public function getData(float $long, float $lat, int $hour): array | false
     {
         $apiKey = env('WEATHERAPI_KEY');
 
@@ -19,7 +19,7 @@ class WeatherApiWeatherProvider implements WeatherProviderInterface
 
         $ch = curl_init();
 
-        $url = "http://api.weatherapi.com/v1/current.json?q=".$long.",".$lat."&key=".$apiKey;
+        $url = "http://api.weatherapi.com/v1/current.json?q=".$long.",".$lat."&hour=".$hour."&key=".$apiKey;
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -31,12 +31,12 @@ class WeatherApiWeatherProvider implements WeatherProviderInterface
             curl_close($ch);
             return false;
         }
-        
+
         curl_close($ch);
 
         $result_json = json_decode($result, true);
 
-        if (!is_array($result_json))
+        if (!is_array($result_json) || !isset($result_json["current"]["temp_c"]))
         {
             Log::error("WeatherApi - error parsing json response");
             return false;
@@ -48,6 +48,8 @@ class WeatherApiWeatherProvider implements WeatherProviderInterface
             return false;
         }
 
-        return $result_json;        
+        return array(
+            "temp" => $result_json["current"]["temp_c"]
+        );        
     }
 }
