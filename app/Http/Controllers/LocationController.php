@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\WeatherService;
+use App\Location;
 
 class LocationController extends Controller
 {
@@ -20,6 +21,19 @@ class LocationController extends Controller
             "lat"  => "required",
             "time" => "required",
         ]);
+
+        $temperature = $this->weatherService->getTemperature(
+            $data["long"], $data["lat"], $data["time"]
+        );
+
+        if ($temperature === null)
+        {
+            // log error and respond
+        }
+
+        return response()->json([
+            "temperature" => $temperature
+        ]);
     }
 
     public function add(Request $request)
@@ -28,5 +42,15 @@ class LocationController extends Controller
             "long" => "required",
             "lat"  => "required",
         ]);
+
+        // Begin transaction
+
+        $location = new Location();
+        $location->longitude = $data['long'];
+        $location->latitude = $data['lat'];
+        $location->save();
+
+        // commit
+
     }
 }
