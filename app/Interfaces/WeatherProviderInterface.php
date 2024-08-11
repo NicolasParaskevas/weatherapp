@@ -4,5 +4,5 @@ namespace App\Interfaces;
 
 interface WeatherProviderInterface
 {
-    public function getData(float $long, float $lat);
+    public function getData(float $long, float $lat): array | false;
 }

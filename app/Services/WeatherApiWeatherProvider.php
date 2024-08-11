@@ -3,24 +3,33 @@
 namespace App\Services;
 
 use App\Interfaces\WeatherProviderInterface;
+use Illuminate\Support\Facades\Log;
 
 class WeatherApiWeatherProvider implements WeatherProviderInterface
 {
-    public function getData(float $long, float $lat)
+    public function getData(float $long, float $lat): array | false
     {
-        // get from API
+        $apiKey = env('WEATHERAPI_KEY');
+
+        if (empty($apiKey))
+        {
+            Log::error("WeatherApi - API key not provided");
+            return false;
+        }
+
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'https://api.open-meteo.com/v1/forecast?latitude='.$long.'&longitude='.$lat.'&hourly=temperature_2m&forecast_days=1');
+        $url = "http://api.weatherapi.com/v1/current.json?q=".$long.",".$lat."&key=".$apiKey;
+
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $result = curl_exec($ch);
         if (curl_errno($ch))
         {
-            // TODO log error getting data from API
-            // echo 'Error:' . curl_error($ch);
-            // curl_close($ch);
-            // return;
+            Log::error("WeatherApi - Curl Error: " . curl_error($ch));
+            curl_close($ch);
+            return false;
         }
         
         curl_close($ch);
@@ -29,18 +38,16 @@ class WeatherApiWeatherProvider implements WeatherProviderInterface
 
         if (!is_array($result_json))
         {
-            // TODO log error parsing json response 
-            // return
+            Log::error("WeatherApi - error parsing json response");
+            return false;
         }
 
-        if (isset($result_json["error"]) && $result_json["error"] === true)
+        if (isset($result_json["error"]))
         {
-            // TODO log error $result_json["reason"]
-            // return
-
+            Log::error("WeatherApi - ".$result_json["code"].": ". $result_json["message"]);
+            return false;
         }
 
-
-
+        return $result_json;        
     }
 }
