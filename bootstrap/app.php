@@ -2,6 +2,9 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
 ))->bootstrap();
@@ -99,15 +102,10 @@ $app->configure('app');
     Configure Logs to be stored in different files
 */
 
-$app->configureMonologUsing(function ($monolog) {
-    $infoHandler = new Monolog\Handler\StreamHandler(storage_path('logs/info.log'), Monolog\Logger::INFO);
-    $errorHandler = new Monolog\Handler\StreamHandler(storage_path('logs/error.log'), Monolog\Logger::ERROR);
-
-    $monolog->pushHandler($infoHandler);
-    $monolog->pushHandler($errorHandler);
-
-    return $monolog;
-});
+$app->instance('Psr\Log\LoggerInterface', new \Monolog\Logger('lumen', [
+    new \Monolog\Handler\StreamHandler(storage_path('logs/info.log'), \Monolog\Logger::INFO),
+    new \Monolog\Handler\StreamHandler(storage_path('logs/error.log'), \Monolog\Logger::ERROR),
+]));
 
 /*
 |--------------------------------------------------------------------------
