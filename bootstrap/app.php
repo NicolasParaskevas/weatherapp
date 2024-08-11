@@ -96,6 +96,20 @@ $app->configure('app');
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
+    Configure Logs to be stored in different files
+*/
+
+$app->configureMonologUsing(function ($monolog) {
+    $infoHandler = new Monolog\Handler\StreamHandler(storage_path('logs/info.log'), Monolog\Logger::INFO);
+    $errorHandler = new Monolog\Handler\StreamHandler(storage_path('logs/error.log'), Monolog\Logger::ERROR);
+
+    $monolog->pushHandler($infoHandler);
+    $monolog->pushHandler($errorHandler);
+
+    return $monolog;
+});
+
+/*
 |--------------------------------------------------------------------------
 | Load The Application Routes
 |--------------------------------------------------------------------------
