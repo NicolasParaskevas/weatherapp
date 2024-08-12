@@ -26,7 +26,7 @@ php -S localhost:8000 -t public
 
 Request:  
 ```
-curl --request POST 'localhost:8000/location?long={longitude}&lat={latitude}'
+curl --request POST 'localhost:8000/location?long=33.38&lat=35.18'
 ```
 Response:
 ```
@@ -37,10 +37,12 @@ HTTP 200 OK
 
 Request:
 ```
-curl 'localhost:8000/location?long={longitude}&lat={latitude}&time={Y-m-d H:i:s}'
+curl 'localhost:8000/location?lat=35.18&long=33.38&date=2024-08-12&hour=21'
 ```
 
 Response:
 ```
-
+{
+    "temperature": "25.00"
+}
 ```
