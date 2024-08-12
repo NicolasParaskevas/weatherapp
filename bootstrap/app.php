@@ -9,7 +9,7 @@ use Monolog\Logger;
     dirname(__DIR__)
 ))->bootstrap();
 
-date_default_timezone_set(env('APP_TIMEZONE', 'EEST'));
+date_default_timezone_set(env('APP_TIMEZONE', 'Europe/Athens'));
 
 /*
 |--------------------------------------------------------------------------
