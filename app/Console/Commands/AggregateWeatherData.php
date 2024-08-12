@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Services\WeatherAggregator;
 use App\Services\WeatherApiWeatherProvider;
 use App\Services\OpenMeteoWeatherProvider;
+use App\Models\Location;
 
 class AggregateWeatherData extends Command
 {
