@@ -20,7 +20,7 @@ class WeatherService
         // log error if not found
         if ($record === null)
         {
-            Log::info("Error could not get temperature for location: long: " . 
+            Log::error("Error could not get temperature for location: long: " . 
                 $data["long"] . " lat: " . $data["lat"] . " and time: " . $data["time"]
             );
         }
