@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WeatherService
 {
@@ -21,7 +22,7 @@ class WeatherService
         if ($record === null)
         {
             Log::error("Error could not get temperature for location: long: " . 
-                $data["long"] . " lat: " . $data["lat"] . " and time: " . $data["time"]
+                $long . " lat: " . $lat . " and time: " . $time
             );
         }
         
