@@ -48,7 +48,7 @@ class AggregateWeatherData extends Command
 
         foreach ($locations as $location)
         {
-            $wa->aggregateData($location->longitude, $location->latitude, $hour);
+            $wa->aggregateData($location, $hour);
         }
 
         Log::info("Finished Weather Data Aggregation");
