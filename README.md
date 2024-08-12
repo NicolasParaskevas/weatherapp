@@ -1,26 +1,46 @@
-# Lumen PHP Framework
+# Setup
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+- Create database and edit .env accordingly
+- Create key for WeatherAPI and add in .env as "WEATHERAPI_KEY" (in the email I provide my API key)
+- Execute commands in the following order:
+```
+composer update
+php artisan migrate
+```
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+# Run the Application
+- To run the background job:
+```
+php artisan queue:work
+```
 
-> **Note:** In the years since releasing Lumen, PHP has made a variety of wonderful performance improvements. For this reason, along with the availability of [Laravel Octane](https://laravel.com/docs/octane), we no longer recommend that you begin new projects with Lumen. Instead, we recommend always beginning new projects with [Laravel](https://laravel.com).
+- To run the web service:
 
-## Official Documentation
+```
+php -S localhost:8000 -t public
+```
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+# Examples with curl
 
-## Contributing
+## Adding a new location
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Request:  
+```
+curl --request POST 'localhost:8000/location?long={longitude}&lat={latitude}'
+```
+Response:
+```
+HTTP 200 OK
+```
 
-## Security Vulnerabilities
+## Getting data from a specified location and time
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Request:
+```
+curl 'localhost:8000/location?long={longitude}&lat={latitude}&time={Y-m-d H:i:s}'
+```
 
-## License
+Response:
+```
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```

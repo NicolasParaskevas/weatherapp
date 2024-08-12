@@ -17,5 +17,9 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/location',  [App\Http\Controllers\LocationController::class, 'get']);
-$router->post('/location', [App\Http\Controllers\LocationController::class, 'add']);
+$router->get('/test', function () use ($router) {
+    return "test";
+});
+
+$router->get('/location',  "LocationController@get");
+$router->post('/location', "LocationController@add");

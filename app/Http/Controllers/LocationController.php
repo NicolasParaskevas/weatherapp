@@ -19,10 +19,11 @@ class LocationController extends Controller
 
     public function get(Request $request)
     {
-        $data = $request->validate([
+        $data = $this->validate($request, [
             "long" => "required",
             "lat"  => "required",
-            "time" => "required",
+            "date" => "required",
+            "hour" => "required",
         ]);
 
         $temperature = $this->weatherService->getTemperature(
@@ -41,7 +42,7 @@ class LocationController extends Controller
 
     public function add(Request $request)
     {
-        $data = $request->validate([
+        $data = $this->validate($request, [
             "long" => "required",
             "lat"  => "required",
         ]);

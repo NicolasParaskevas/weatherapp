@@ -40,8 +40,8 @@ class WeatherAggregator
                     $record = new WeatherRecord();
                     $record->location_id = $location->id;
                     $record->temperature = $avg;
-                    $record->created_at  = date("Y-m-d $hour:i:s");
-                    $record->updated_at  = date("Y-m-d $hour:i:s");
+                    $record->created_at  = date("Y-m-d $hour:00:00");
+                    $record->updated_at  = date("Y-m-d $hour:00:00");
                     $record->save();
                 });
             }
