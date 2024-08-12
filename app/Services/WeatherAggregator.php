@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Location;
 use App\Models\WeatherRecord;
 
@@ -33,24 +34,21 @@ class WeatherAggregator
         if (count($temps) > 0)
         {
             $avg = array_sum($temps)/count($temps);
-            
-            // insert the average in db
             try
             {
-                DB::beginTransaction();
-                $record = new WeatherRecord();
-                $record->location_id = $location->id;
-                $record->temperature = $avg;
-                $record->created_at  = date("Y-m-d $hour:i:s");
-                $record->updated_at  = date("Y-m-d $hour:i:s");
-                $record->save();
-                DB::commit();
-
+                DB::transaction(function () use ($location, $avg, $hour) {
+                    $record = new WeatherRecord();
+                    $record->location_id = $location->id;
+                    $record->temperature = $avg;
+                    $record->created_at  = date("Y-m-d $hour:i:s");
+                    $record->updated_at  = date("Y-m-d $hour:i:s");
+                    $record->save();
+                });
             }
-            catch (\Exception $e)
+            catch(\Exception $e)
             {
                 Log::error("Error when saving weather_record for location: " . $location->id . " - " . $e->getMessage());
-            }
+            }   
         }
     }
 }
