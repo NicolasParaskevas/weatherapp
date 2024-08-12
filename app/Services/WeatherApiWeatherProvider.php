@@ -19,7 +19,7 @@ class WeatherApiWeatherProvider implements WeatherProviderInterface
 
         $ch = curl_init();
 
-        $url = "http://api.weatherapi.com/v1/current.json?q=".$long.",".$lat."&hour=".$hour."&key=".$apiKey;
+        $url = "http://api.weatherapi.com/v1/current.json?q=$long,$lat&hour=$hour&key=$apiKey";
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

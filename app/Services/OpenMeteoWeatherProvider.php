@@ -10,7 +10,7 @@ class OpenMeteoWeatherProvider implements WeatherProviderInterface
     {
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'https://api.open-meteo.com/v1/forecast?latitude='.$long.'&longitude='.$lat.'&hourly=temperature_2m&forecast_days=1');
+        curl_setopt($ch, CURLOPT_URL, "https://api.open-meteo.com/v1/forecast?latitude=$long&longitude=$lat&hourly=temperature_2m&forecast_days=1");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $result = curl_exec($ch);
