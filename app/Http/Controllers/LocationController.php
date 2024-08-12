@@ -26,8 +26,13 @@ class LocationController extends Controller
             "hour" => "required",
         ]);
 
+        $hour = str_pad($data["hour"], 2, "0", STR_PAD_LEFT);
+        $day  = $data["date"];
+
+        $time = date("Y-m-d H:00:00", strtotime("$day $hour:00:00"));
+
         $temperature = $this->weatherService->getTemperature(
-            $data["long"], $data["lat"], $data["time"]
+            $data["long"], $data["lat"], $time
         );
 
         if ($temperature === null)
