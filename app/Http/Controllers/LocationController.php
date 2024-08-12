@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Services\WeatherService;
-use App\Location;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Models\Location;
 
 class LocationController extends Controller
 {
@@ -28,7 +31,7 @@ class LocationController extends Controller
 
         if ($temperature === null)
         {
-            // log error and respond
+            return response()->json(["error" => "Not Found"], 404);
         }
 
         return response()->json([
@@ -44,13 +47,23 @@ class LocationController extends Controller
         ]);
 
         // Begin transaction
+        try
+        {
+            DB::beginTransaction();
+            $location = new Location();
+            $location->longitude = $data['long'];
+            $location->latitude = $data['lat'];
+            $location->save();
+            DB::commit();
 
-        $location = new Location();
-        $location->longitude = $data['long'];
-        $location->latitude = $data['lat'];
-        $location->save();
-
-        // commit
-
+            Log::info("New location added: long: " . $location->longitude . " lat: " . $location->latitude);
+    
+        }
+        catch (\Exception $e)
+        {
+            DB::rollback();
+            Log::error("Error when adding location: long: " . $location->longitude . " lat: " . $location->latitude . " " . $e->getMessage());
+        }
+        
     }
 }
