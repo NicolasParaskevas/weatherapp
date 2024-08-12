@@ -17,6 +17,14 @@ class WeatherService
         ->pluck("weather_records.temperature")
         ->first();
 
+        // log error if not found
+        if ($record === null)
+        {
+            Log::info("Error could not get temperature for location: long: " . 
+                $data["long"] . " lat: " . $data["lat"] . " and time: " . $data["time"]
+            );
+        }
+        
         return $record;
     }
 }
