@@ -1,6 +1,6 @@
 # Setup
 
-- Create database and edit .env accordingly
+- Create database and edit .env accordingly (same as .env.example)
 - Create key for WeatherAPI and add in .env as "WEATHERAPI_KEY" (in the email I provide my API key)
 - Execute commands in the following order:
 ```
