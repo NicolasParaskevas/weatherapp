@@ -11,7 +11,7 @@ php artisan migrate
 # Run the Application
 - To run the background job:
 ```
-php artisan queue:work
+php artisan queue:listen
 ```
 
 - To run the web service:
